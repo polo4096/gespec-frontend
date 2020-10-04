@@ -10,7 +10,9 @@
   "dependencies": {
     "bootstrap-vue": "^2.17.3",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-form-generator": "^2.3.4",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.11.5",
@@ -24,6 +26,8 @@
     "mutationobserver-shim": "^0.3.7",
     "popper.js": "^1.16.1",
     "portal-vue": "^2.1.7",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
     "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
     "vue-cli-plugin-bootstrap-vue": "~0.7.0",
