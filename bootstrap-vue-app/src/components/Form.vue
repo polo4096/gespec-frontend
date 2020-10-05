@@ -12,38 +12,17 @@
     Vue.use(VueFormGenerator)
 
     export default {
+        props: {
+            schema: {
+                type: Object,
+            },
+        },
         data() {
             return {
                 model: {
-                    id: "420"
+                    
                 },
-                schema: {
-                    fields: [
-                        {
-                            type: "checkbox",
-                            label: "Status",
-                            model: "status",
-                            default: true
-                        }
-                    ],
-                    groups: [
-                        {
-                            legend: "Sous section du chapitre",
-                            fields: [
-                                {
-                                    type: "input",
-                                    inputType: "number",
-                                    id: "current_smic",
-                                    label: "Smic",
-                                    model: "smic",
-                                    onChanged: function(model, newVal, oldVal) {
-                                        console.log(`Model's name changed from ${oldVal} to ${newVal}. Model:`, model);
-                                    },
-                                }
-                            ]
-                        }
-                    ]
-                },
+                
                 formOptions: {
                     validateAfterLoad: true,
                     validateAfterChanged: true,
