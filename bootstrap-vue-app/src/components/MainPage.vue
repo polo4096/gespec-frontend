@@ -21,8 +21,27 @@
             b-form-input(v-model="text" placeholder="Enter your name")
             div(class="mt-2") Value: {{ text }}   
 
+        div(class="row")
+          div(class="col-3")
+            h3 Draggable 1
+             draggable(class="dragArea list-group" :list="list1" :group="{ name: 'formInput', pull: 'clone', put: false }" @change="log" @end="formance('textArea', text)")
+              div(class="list-group-item" v-for="element in list1" :key="element.name")
+                div {{ element.name }}
+                  
+
       b-col.mt-3( cols="6" style="background-color : #8D89A3; border-radius: 15px 50px;") 
         Form(:schema="schema")
+
+        div(class="row")
+          div(class="col-3")
+            h3 Draggable 2
+            draggable(class="dragArea list-group" :list="list2" group="formInput" @change="log")
+              div(class="list-group-item" v-for="element in list2" :key="element.name")
+                div {{ element.name }}
+          
+          rawDisplayer(class="col-3" :value="list1" title="List 1")
+          rawDisplayer(class="col-3" :value="list2" title="List 2")
+          
          
       b-col
         b-row.pt-5(align-h="center")
@@ -31,14 +50,20 @@
       b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versions & Comments" right shadow)
         div(class="px-3 py-2")
           p Ma liste des versions
+
 </template>
 
 
 <script>
 import Form from '../components/Form'
+import draggable from 'vuedraggable'
 
 export default {
+  name: "clone",
+  display: "Clone",
+  order: 2,
   components: {
+    draggable,
     Form,
   },
   props: {
@@ -47,6 +72,17 @@ export default {
 
   data() {
     return {
+      list1: [
+        { name: "ex1", id: 1 },
+        { name: "ex2", id: 2 },
+        { name: "ex3", id: 3 },
+        { name: "ex4", id: 4 }
+      ],
+      list2: [
+        { name: "ex5", id: 5 },
+        { name: "ex6", id: 6 },
+        { name: "ex7", id: 7 }
+      ],
       myToggle: false,
       draglistShow : false,
       versionTabShow : false,

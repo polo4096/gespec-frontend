@@ -11,8 +11,10 @@
     "@shopify/draggable": "^1.0.0-beta.8",
     "bootstrap-vue": "^2.17.3",
     "core-js": "^3.6.5",
+    "sortablejs": "^1.12.0",
     "vue": "^2.6.11",
     "vue-form-generator": "^2.3.4",
+    "vuedraggable": "^2.24.1",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
