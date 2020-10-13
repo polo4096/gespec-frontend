@@ -12,19 +12,19 @@
           p Ma liste de composants
           b-button(variant="primary" v-b-modal.modal-1 ) Check Box
           b-modal(id="modal-1" title="BootstrapVue"  @ok="formance('checkbox', text)")
-            b-form-input(v-model="text" placeholder="Enter your name")
+            b-form-input(v-model="text" placeholder="What's to be checked ?")
             div(class="mt-2") Value: {{ text }}
 
         div(class="px-3 py-2")    
           b-button(variant="secondary" v-b-modal.modal-2 ) Text Box
           b-modal(id="modal-2" title="BootstrapVue"  @ok="formance('textArea', text)")
-            b-form-input(v-model="text" placeholder="Enter your name")
+            b-form-input(v-model="text" placeholder="What's the information needed ?")
             div(class="mt-2") Value: {{ text }}   
 
         div(class="row")
-          div(class="col-3")
+          div(class="col")
             h3 Draggable 1
-             draggable(class="dragArea list-group" :list="list1" :group="{ name: 'formInput', pull: 'clone', put: false }" @change="log" @end="formance('textArea', text)")
+             draggable(class="dragArea list-group" :list="list1" :group="{ name: 'formInput', pull: 'clone', put: false }" @end="onEnd")
               div(class="list-group-item" v-for="element in list1" :key="element.name")
                 div {{ element.name }}
                   
@@ -33,14 +33,11 @@
         Form(:schema="schema")
 
         div(class="row")
-          div(class="col-3")
+          div(class="col-4")
             h3 Draggable 2
-            draggable(class="dragArea list-group" :list="list2" group="formInput" @change="log")
+            draggable(class="dragArea list-group" :list="list2" group="formInput")
               div(class="list-group-item" v-for="element in list2" :key="element.name")
                 div {{ element.name }}
-          
-          rawDisplayer(class="col-3" :value="list1" title="List 1")
-          rawDisplayer(class="col-3" :value="list2" title="List 2")
           
          
       b-col
@@ -50,7 +47,6 @@
       b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versions & Comments" right shadow)
         div(class="px-3 py-2")
           p Ma liste des versions
-
 </template>
 
 
@@ -73,8 +69,8 @@ export default {
   data() {
     return {
       list1: [
-        { name: "ex1", id: 1 },
-        { name: "ex2", id: 2 },
+        { name: "Checkbox", id: 1, type : 'checkbox' },
+        { name: "Text", id: 2, type : 'textArea' },
         { name: "ex3", id: 3 },
         { name: "ex4", id: 4 }
       ],
@@ -114,6 +110,11 @@ export default {
   },
 
   methods: {
+
+    onEnd : function(evt){
+      this.formance(this.list1[evt.oldIndex].type, 'swag');
+      console.log("HELLO", );
+    },
     
     formance : function(type, label) {
       var x ; 
