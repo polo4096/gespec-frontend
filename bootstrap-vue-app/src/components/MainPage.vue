@@ -9,13 +9,25 @@
 
       b-sidebar(v-model="draglistShow" id="sidebar-1" title="DRAGLIST" shadow)
         div(class="px-3 py-2")
-          p Ma liste de composants
-          b-button(variant="primary" v-b-modal.modal-1 ) Check Box
-          b-modal(id="modal-1" title="BootstrapVue"  @ok="formance('checkbox', text)")
+          b-form
+            b-form-group(
+              id="input-group-1"
+              label="Libellé :"
+              label-for="input-1"
+              description="Entrez le nom du champ que vous voulez renseigner.")
+               b-form-input(
+                id="input-1"
+                v-model="form.email"
+                type="email"
+                required
+                placeholder="Libellé...")
+          //p Ma liste de composants
+          //b-button(variant="primary" v-b-modal.modal-1 ) Check Box
+          //b-modal(id="modal-1" title="BootstrapVue"  @ok="formance('checkbox', text)")
             b-form-input(v-model="text" placeholder="What's to be checked ?")
             div(class="mt-2") Value: {{ text }}
 
-        div(class="px-3 py-2")    
+        //div(class="px-3 py-2")    
           b-button(variant="secondary" v-b-modal.modal-2 ) Text Box
           b-modal(id="modal-2" title="BootstrapVue"  @ok="formance('textArea', text)")
             b-form-input(v-model="text" placeholder="What's the information needed ?")
@@ -23,7 +35,7 @@
 
         div(class="row")
           div(class="col")
-            h3 Draggable 1
+            h3 Drag
              draggable(class="dragArea list-group" :list="list1" :group="{ name: 'formInput', pull: 'clone', put: false }" @end="onEnd")
               div(class="list-group-item" v-for="element in list1" :key="element.name")
                 div {{ element.name }}
@@ -34,7 +46,7 @@
 
         div(class="row")
           div(class="col-4")
-            h3 Draggable 2
+            h3 Drop here
             draggable(class="dragArea list-group" :list="list2" group="formInput")
               div(class="list-group-item" v-for="element in list2" :key="element.name")
                 div {{ element.name }}
@@ -79,9 +91,13 @@ export default {
         { name: "ex6", id: 6 },
         { name: "ex7", id: 7 }
       ],
+      form: {
+          email: '',
+      },
       myToggle: false,
       draglistShow : false,
       versionTabShow : false,
+      show: true,
       text : '',
       schema: {
           fields: [
@@ -112,7 +128,8 @@ export default {
   methods: {
 
     onEnd : function(evt){
-      this.formance(this.list1[evt.oldIndex].type, 'swag');
+      
+      this.formance(this.list1[evt.oldIndex].type, this.form.email);
       console.log("HELLO", );
     },
     
