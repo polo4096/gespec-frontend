@@ -17,8 +17,8 @@
               description="Entrez le nom du champ que vous voulez renseigner.")
                b-form-input(
                 id="input-1"
-                v-model="form.email"
-                type="email"
+                v-model="form.topic"
+                type="topic"
                 required
                 placeholder="Libellé...")
           //p Ma liste de composants
@@ -42,14 +42,14 @@
                   
 
       b-col.mt-3( cols="6" style="background-color : #8D89A3; border-radius: 15px 50px;") 
-        Form(:schema="schema")
-
-        div(class="row")
-          div(class="col-4")
-            h3 Drop here
-            draggable(class="dragArea list-group" :list="list2" group="formInput")
-              div(class="list-group-item" v-for="element in list2" :key="element.name")
-                div {{ element.name }}
+        br
+        br
+        h2 Drop here
+        br
+        Form(:list2="list2")
+      
+            
+          
           
          
       b-col
@@ -87,12 +87,10 @@ export default {
         { name: "ex4", id: 4 }
       ],
       list2: [
-        { name: "ex5", id: 5 },
-        { name: "ex6", id: 6 },
-        { name: "ex7", id: 7 }
-      ],
+        //Inputs
+      ], 
       form: {
-          email: '',
+          topic: '',
       },
       myToggle: false,
       draglistShow : false,
@@ -106,8 +104,8 @@ export default {
           ],
           groups: [
               {
-                  legend: "Sous section du chapitre",
-                  fields: [
+                  //legend: "Sous section du chapitre",
+                 /*  fields: [
                       {
                           type: "input",
                           inputType: "number",
@@ -118,7 +116,7 @@ export default {
                               console.log(`Model's name changed from ${oldVal} to ${newVal}. Model:`, model);
                           },
                       }
-                  ]
+                  ] */
               }
           ]
       },
@@ -129,7 +127,7 @@ export default {
 
     onEnd : function(evt){
       
-      this.formance(this.list1[evt.oldIndex].type, this.form.email);
+      this.formance(this.list1[evt.oldIndex].type, this.form.topic);
       console.log("HELLO", );
     },
     
@@ -137,13 +135,19 @@ export default {
       var x ; 
 
       x= {
-          type: type,
-          label: label,
-          model: label,
-          default: true
+            schema : {
+              fields : [
+              {
+                type: type,
+                label: label,
+                model: label,
+                default: true
+            }
+          ]
+        }
       }
       console.log("HELLO", x)
-      this.schema.fields.push(x);
+      this.list2.push(x);
 
     }
   },

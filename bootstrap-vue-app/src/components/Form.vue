@@ -1,20 +1,28 @@
 <template lang="pug">
     b-container
-        h1 Titre du chapitre
-        vue-form-generator(:schema="schema" :model="model" :options="formOptions")
+        draggable(class="dragArea list-group" :list="list2" group="formInput")
+          div(class="list-group-item" v-for="element in list2" :key="element.name")
+            div {{ element.name }}
+            vue-form-generator(:schema="element.schema" :model="element.model" :options="formOptions")
+
+        
 </template>
 
 <script>
     import Vue from 'vue'
     import VueFormGenerator from 'vue-form-generator'
+    import draggable from 'vuedraggable'
     import 'vue-form-generator/dist/vfg.css'
 
     Vue.use(VueFormGenerator)
 
     export default {
+        components: {
+            draggable
+        },
         props: {
-            schema: {
-                type: Object,
+            list2: {
+                type: Array,
             },
         },
         data() {
