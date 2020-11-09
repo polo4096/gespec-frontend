@@ -10,7 +10,7 @@
       b-sidebar(v-model="draglistShow" id="sidebar-1" title="DRAGLIST" shadow)
         //Input du libéllé de l'Input
         div(class="px-3 py-2")
-          b-form
+          b-form(autocomplete="off")
             b-form-group(
               id="input-group-1"
               label="Libellé :"
