@@ -21,17 +21,6 @@
                 type="topic"
                 required
                 placeholder="Libellé...")
-          //p Ma liste de composants
-          //b-button(variant="primary" v-b-modal.modal-1 ) Check Box
-          //b-modal(id="modal-1" title="BootstrapVue"  @ok="formance('checkbox', text)")
-            b-form-input(v-model="text" placeholder="What's to be checked ?")
-            div(class="mt-2") Value: {{ text }}
-
-        //div(class="px-3 py-2")    
-          b-button(variant="secondary" v-b-modal.modal-2 ) Text Box
-          b-modal(id="modal-2" title="BootstrapVue"  @ok="formance('textArea', text)")
-            b-form-input(v-model="text" placeholder="What's the information needed ?")
-            div(class="mt-2") Value: {{ text }}   
 
         div(class="row")
           div(class="col")
@@ -46,7 +35,7 @@
         br
         h2 Drop here
         br
-        Form(:list2="list2")
+        Form(:list2="list2" @remove-row="removeRow" )
       
             
           
@@ -135,20 +124,26 @@ export default {
       var x ; 
 
       x= {
-            schema : {
-              fields : [
-              {
-                type: type,
-                label: label,
-                model: label,
-                default: true
-            }
-          ]
-        }
+          schema : {
+            fields : [
+            {
+              type: type,
+              label: label,
+              model: label,
+              default: true
+          }
+        ]
+      }
       }
       console.log("HELLO", x)
       this.list2.push(x);
 
+    },
+
+    removeRow(index) {
+      console.log("HEY DUDE", index)
+      this.list2.splice(index)
+      console.log(this.list2)
     }
   },
 
