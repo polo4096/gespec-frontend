@@ -1,8 +1,8 @@
 <template lang="pug">
     b-container
-        draggable(class="dragArea list-group" :list="list2" group="formInput")
-          div(class="list-group-item" v-for="(element,index) in list2" :key="element.name")
-            a(href="#", @click.prevent="$emit('remove-row', index)", align-content= "right") X
+        draggable(class="dragArea list-group" :list="dropList" group="{name : 'formInput', put: false}")
+          div(class="list-group-item" v-for="(element,index) in dropList" :key="element.name")
+            a(href="#", @click.prevent="$emit('remove-row', index)" style="float: right") X
             div {{ element.name }}
             vue-form-generator(:schema="element.schema" :model="element.model" :options="formOptions")
 
@@ -22,27 +22,19 @@
             draggable
         },
         props: {
-            list2: {
+            dropList: {
                 type: Array,
             },
         },
         data() {
             return {
-                model: {
-                    
-                },
-                
-                formOptions: {
-                    validateAfterLoad: true,
-                    validateAfterChanged: true,
-                    validateAsync: true
-                }
+
             }
             
         },
         methods: {
             
-           }
+        }
      
     }
 </script>
