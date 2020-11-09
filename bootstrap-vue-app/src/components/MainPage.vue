@@ -7,9 +7,9 @@
         b-row.pt-5(align-h="center")
           b-avatar(variant="success" icon="bag-plus" v-b-toggle.sidebar-1)  
       //Sidebar contenant la draglist
-      b-sidebar(v-model="draglistShow" id="sidebar-1" title="DRAGLIST" shadow)
+      b-sidebar(v-model="draglistShow" id="sidebar-1" title="DRAGLIST" shadow style=" pointer-events: all; position: absolute")
         //Input du libéllé de l'Input
-        div(class="px-3 py-2")
+        div(class="row mx-3 py-2")
           b-form(autocomplete="off")
             b-form-group(
               id="input-group-1"
@@ -25,12 +25,12 @@
         div(class="row")
           div(class="col")
             h3 Drag
-            draggable(class="dragArea list-group" :list="dragList" :group="{ name: 'formInput', pull: 'clone', put: false }" :sort="false" @end="onEnd")
+            draggable(class="dragArea list-group" :list="dragList" :group="{ name: 'formInput', pull: 'clone', put: false }" :sort="false" @start="onStart" @end="onEnd")
               div(class="list-group-item" v-for="element in dragList" :key="element.name")
                 div {{ element.name }}
                   
       //MainPage
-      b-col.mt-3( cols="6" style="background-color : #8D89A3; border-radius: 15px 50px; padding: 10px" )
+      b-col.mt-3( cols="6" @mouseover="mouseOver()" @mouseleave="mouseLeave()" style="background-color : #8D89A3; border-radius: 15px 50px; padding: 10px;" )
         h2 Drop here
         br
         Form(:dropList="dropList" @remove-row="removeRow" )
@@ -82,15 +82,21 @@ export default {
       versionTabShow : false,
       show: true,
       text : '',
+
+      activeCopy: false
     }
   },
 
   methods: {
-
+    onStart : function () {
+      this.draglistShow = ! this.draglistShow
+    },
     onEnd : function(evt){
-      
+
       this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
-      console.log("HELLO", );
+      console.log("HELLO BATARD", );
+
+      this.draglistShow = ! this.draglistShow
     },
     
     formance : function(type, label) {
@@ -120,7 +126,20 @@ export default {
       console.log("HEY DUDE", index)
       this.dropList.splice(index, 1)
       console.log(this.dropList)
+    },
+    mouseOver: function(){
+      this.activeCopy = true
+      console.log("TRUEE !")
+    },
+    mouseLeave: function(){
+      this.activeCopy = false
+      console.log("FALSEE !")
     }
+
+  },
+
+  mounted () {
+    this.$store.dispatch('loadChapters')
   },
 
 }
