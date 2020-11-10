@@ -31,7 +31,7 @@
                   
       //MainPage
       b-col.mt-3( cols="6" @mouseover="mouseOver()" @mouseleave="mouseLeave()" style="background-color : #8D89A3; border-radius: 15px 50px; padding: 10px;" )
-        h2 Drop here
+        h2 {{this.actualChapter.title}}
         br
         Form(:dropList="dropList" @remove-row="removeRow" )
       
@@ -82,10 +82,20 @@ export default {
       versionTabShow : false,
       show: true,
       text : '',
-
+      actualChapter: {},
       activeCopy: false
     }
   },
+  computed: {
+    myChapters: {
+        get() {
+          return this.$store.state.chapters
+        },
+        set(value) {
+          this.$store.commit('SET_CHAPTERS', value)
+        }
+      }
+    },
 
   methods: {
     onStart : function () {
@@ -94,8 +104,6 @@ export default {
     onEnd : function(evt){
 
       this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
-      console.log("HELLO BATARD", );
-
       this.draglistShow = ! this.draglistShow
     },
     
@@ -117,29 +125,46 @@ export default {
 
           }
       }
-      console.log("HELLO", x)
       this.dropList.push(x);
+      console.log(this.dropList)
 
     },
 
     removeRow(index) {
-      console.log("HEY DUDE", index)
       this.dropList.splice(index, 1)
-      console.log(this.dropList)
     },
     mouseOver: function(){
       this.activeCopy = true
-      console.log("TRUEE !")
     },
     mouseLeave: function(){
       this.activeCopy = false
-      console.log("FALSEE !")
     }
 
   },
+  async created() {
+    await this.$store.dispatch('loadChapters')
+    this.actualChapter = this.myChapters[0]
+    console.log("LOADED !", this.actualChapter.topics)
+    console.log("Mounted")
+    this.actualChapter.topics.forEach(el => {
+      console.log("element : ", el.schema.fields)
+
+      let x ;
+      x = {
+        schema : {
+          fields : el.schema.fields
+        },
+        model: {
+
+        }
+      }
+      this.dropList.push(x)
+    })
+  },
 
   mounted () {
-    this.$store.dispatch('loadChapters')
+
+     //this.dropList = this.actualChapter.topics
   },
 
 }

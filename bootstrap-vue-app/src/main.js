@@ -21,11 +21,12 @@ const store = new Vuex.Store({
   mutations: {
     SET_CHAPTERS (state, chapters) {
       state.chapters = chapters
-    }
+    },
   },
   actions: {
-    loadChapters ({ commit }) {
-      axios
+      async loadChapters ({ commit }) {
+          console.log("YO")
+          return axios
           .get('http://localhost:3000/chapter')
           .then(r => r.data)
           .then(chapters => {
