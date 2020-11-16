@@ -1,13 +1,16 @@
 <template lang="pug">
   b-container(fluid)
+    
 
     b-form-row
       //Bouton de la draglist
       b-col()
         b-row.pt-5(align-h="center")
           b-avatar(variant="success" icon="bag-plus" v-b-toggle.sidebar-1)  
+
       //Sidebar contenant la draglist
       b-sidebar(v-model="draglistShow" id="sidebar-1" title="DRAGLIST" shadow)
+
         //Input du libéllé de l'Input
         div(class="px-3 py-2")
           b-form(autocomplete="off")
@@ -21,6 +24,7 @@
                 v-model="form.topic"
                 required
                 placeholder="Libellé...")
+
         //Draglist
         div(class="row")
           div(class="col")
@@ -35,8 +39,7 @@
         br
         Form(:dropList="dropList" @remove-row="removeRow" )
       
-            
-          
+               
           
       //Bouton de la gestion des versions
       b-col
@@ -52,6 +55,9 @@
 <script>
 import Form from '../components/Form'
 import draggable from 'vuedraggable'
+import Vue from "vue";
+import tabl from "./tabl.vue";
+Vue.component("tabl", tabl);
 
 export default {
   name: "clone",
@@ -69,7 +75,17 @@ export default {
     return {
       dragList: [
         { name: "Checkbox", id: 1, type : 'checkbox' },
-        { name: "Text", id: 2, type : 'textArea' }
+        { name: "Text", id: 2, type : 'textArea' },
+        {
+          name: "Radios",
+          type: "radios",
+          label: "Type",
+          model: "type",
+          values: [
+              "Personal",
+              "Business"
+                  ]
+          }
       ],
       dropList: [
         //Inputs
@@ -88,25 +104,55 @@ export default {
   methods: {
 
     onEnd : function(evt){
-      
+      if (this.dragList[evt.oldIndex].type === "radios"){
+      this.formancespek(this.dragList[evt.oldIndex].type, this.form.topic, this.values);
+      console.log("Wassup?", );
+      }
+
+      else {
       this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
       console.log("HELLO", );
+      }
     },
     
+    formancespek : function(type, label) {
+      var x ;
+
+      x= {
+          schema : {
+            fields : [
+              {
+                type: type,
+                label: label,
+                model: label,
+                values: ["values","John"],
+                default: true
+              }
+            ]
+          },
+          model: {
+
+          }
+      }
+      console.log("SELECT stuff", x)
+      this.dropList.push(x);
+    },
+
+
     formance : function(type, label) {
       var x ; 
 
       x= {
           schema : {
             fields : [
-            {
-              type: type,
-              label: label,
-              model: label,
-              default: true
-          }
-        ]
-      },
+              {
+                type: type,
+                label: label,
+                model: label,
+                default: true
+              }
+            ]
+          },
           model: {
 
           }
