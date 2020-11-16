@@ -52,6 +52,22 @@ const store = new Vuex.Store({
                   console.log(("AXIOS CHAPTERS :"), chapters)
                   commit('SET_OLD_CHAPTERS', chapters)
               })
+      },
+
+      async updateChapter({dispatch}, payload) {
+          const params = payload
+          console.log("PARAMS : ", params)
+          let url = "http://localhost:3000/chapter/" + params._id
+          console.log("URL :", url)
+          console.log("chapterId :", params)
+          return axios
+              .post(url,params)
+              .then(r => r.data)
+              .then(chapters => {
+                  dispatch('loadChapters')
+                  console.log(("UPDATED:"), chapters)
+
+              })
       }
   }
 })

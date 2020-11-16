@@ -41,16 +41,18 @@
       //Bouton de la gestion des versions
       b-col
         b-row.pt-5(align-h="center")
+          b-btn(@click="saveChapter()" variant="primary" class="mx-4") Versionner
           b-avatar(variant="info" icon="collection" v-b-toggle.sidebar-2)
       //Sidebar de la gestion des versions
-      b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versions & Comments" right shadow)
-        h4 Version la plus récente
+      b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versionning" right shadow)
+        h4 Version en production
         div(class="py-2")
-          div(v-if="this.myChapters[0]" @click="changeChapter(myChapters[0])" style="cursor: pointer") {{this.myChapters[0].title}} V: {{this.myChapters[0]._version}}.0
+          b-button(v-if="this.myChapters[0]" @click="changeChapter(myChapters[0])" variant="success") {{this.myChapters[0].title}} V: {{this.myChapters[0]._version}}.0
         h4 Versions antérieurs
         div(class="py-2")
           div(v-for="version in previousChapters")
-            div(@click="changeChapter(version)" style="cursor: pointer") {{version.title}} V: {{version._version}}.0
+            b-button(@click="changeChapter(version)" class="my-2" variant="info") {{version.title}} V: {{version._version}}.0
+            //div(@click="changeChapter(version)" style="cursor: pointer") {{version.title}} V: {{version._version}}.0
 </template>
 
 
@@ -95,7 +97,21 @@ export default {
     actualChapter: async function (val) {
       console.log("VAL :", val)
       await this.$store.dispatch('loadPrevious', {chapterId: val._id})
-      //console.log("PREEVOUIS CHAPTER : " , this.previousChapters)
+      this.dropList = []
+      this.actualChapter.topics.forEach(el => {
+        console.log("element : ", el.schema.fields)
+
+        let x ;
+        x = {
+          schema : {
+            fields : el.schema.fields
+          },
+          model: {
+
+          }
+        }
+        this.dropList.push(x)
+      })
     }
 
   },
@@ -168,6 +184,11 @@ export default {
     changeChapter(newChapter) {
       this.actualChapter = newChapter
       console.log("Chapitre changé")
+    },
+    async saveChapter() {
+      this.actualChapter.topics = this.dropList
+      await this.$store.dispatch('updateChapter', this.actualChapter)
+      await this.$store.dispatch('loadPrevious', {chapterId: this.actualChapter._id})
     }
 
   },
