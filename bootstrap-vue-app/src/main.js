@@ -16,12 +16,16 @@ Vue.use(VueAxios, axios)
 
 const store = new Vuex.Store({
   state: {
-    chapters: 0
+    chapters: [],
+    oldChapters: []
   },
   mutations: {
     SET_CHAPTERS (state, chapters) {
       state.chapters = chapters
     },
+    SET_OLD_CHAPTERS (state, chapters) {
+        state.oldChapters = chapters
+    }
   },
   actions: {
       async loadChapters ({ commit }) {
@@ -33,7 +37,22 @@ const store = new Vuex.Store({
             console.log(chapters)
             commit('SET_CHAPTERS', chapters)
           })
-    }
+    },
+      async loadPrevious({commit}, payload) {
+          const params ={
+              chapterId: payload.chapterId
+          }
+          let url = "http://localhost:3000/old_chapter/" + params.chapterId
+          console.log("URL :", url)
+          console.log("chapterId :", params)
+          return axios
+              .get(url)
+              .then(r => r.data)
+              .then(chapters => {
+                  console.log(("AXIOS CHAPTERS :"), chapters)
+                  commit('SET_OLD_CHAPTERS', chapters)
+              })
+      }
   }
 })
 

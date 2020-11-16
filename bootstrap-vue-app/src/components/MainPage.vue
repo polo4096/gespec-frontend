@@ -44,8 +44,13 @@
           b-avatar(variant="info" icon="collection" v-b-toggle.sidebar-2)
       //Sidebar de la gestion des versions
       b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versions & Comments" right shadow)
-        div(class="px-3 py-2")
-          p Ma liste des versions
+        h4 Version la plus récente
+        div(class="py-2")
+          div(v-if="this.myChapters[0]" @click="changeChapter(myChapters[0])" style="cursor: pointer") {{this.myChapters[0].title}} V: {{this.myChapters[0]._version}}.0
+        h4 Versions antérieurs
+        div(class="py-2")
+          div(v-for="version in previousChapters")
+            div(@click="changeChapter(version)" style="cursor: pointer") {{version.title}} V: {{version._version}}.0
 </template>
 
 
@@ -86,6 +91,14 @@ export default {
       activeCopy: false
     }
   },
+  watch: {
+    actualChapter: async function (val) {
+      console.log("VAL :", val)
+      await this.$store.dispatch('loadPrevious', {chapterId: val._id})
+      //console.log("PREEVOUIS CHAPTER : " , this.previousChapters)
+    }
+
+  },
   computed: {
     myChapters: {
         get() {
@@ -94,7 +107,20 @@ export default {
         set(value) {
           this.$store.commit('SET_CHAPTERS', value)
         }
+      },
+    previousChapters: {
+      get() {
+        let array = this.$store.state.oldChapters
+        array.reverse()
+        return array
+      },
+      set(value) {
+        this.$store.commit('SET_OLD_CHAPTERS', value)
       }
+    },
+
+
+
     },
 
   methods: {
@@ -138,6 +164,10 @@ export default {
     },
     mouseLeave: function(){
       this.activeCopy = false
+    },
+    changeChapter(newChapter) {
+      this.actualChapter = newChapter
+      console.log("Chapitre changé")
     }
 
   },
