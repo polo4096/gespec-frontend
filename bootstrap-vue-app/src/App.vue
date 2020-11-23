@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       myStyle:{
-            backgroundColor:"#CBCBCF" 
+            backgroundColor:"#519AEE" 
       }
     }
   },
@@ -27,7 +27,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #063872;
   
   height: 100%;
 }
@@ -37,6 +37,6 @@ html {
 }
 body {
   min-height: 100%;
-  background-color : #CBCBCF;
+  background-color : #519AEE;
 }
 </style>

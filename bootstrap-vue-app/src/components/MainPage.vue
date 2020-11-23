@@ -6,7 +6,7 @@
       //Bouton de la draglist
       b-col()
         b-row.pt-5(align-h="center")
-          b-avatar(variant="success" icon="bag-plus" v-b-toggle.sidebar-1)  
+          b-avatar(variant="light" icon="bag-plus" v-b-toggle.sidebar-1)  
 
       //Sidebar contenant la draglist
       b-sidebar(v-model="draglistShow" id="sidebar-1" title="DRAGLIST" shadow)
@@ -51,7 +51,7 @@
 
                   
       //MainPage
-      b-col.mt-3( cols="6" style="background-color : #8D89A3; border-radius: 15px 15px; padding: 10px" )
+      b-col.mt-3( cols="6" style="background-color : #f8f9fa; border-radius: 10px 10px; padding: 10px" )
         h2 Drop here
         br
         Form(:dropList="dropList" @remove-row="removeRow" )
@@ -61,7 +61,7 @@
       //Bouton de la gestion des versions
       b-col
         b-row.pt-5(align-h="center")
-          b-avatar(variant="info" icon="collection" v-b-toggle.sidebar-2)
+          b-avatar(variant="light" icon="collection" v-b-toggle.sidebar-2)
       //Sidebar de la gestion des versions
       b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versions & Comments" right shadow)
         div(class="px-3 py-2")
@@ -125,6 +125,7 @@ export default {
       inputs = this.radioInputs;
       this.radioInputs = [];
       this.formancespek("radios", this.form.topic, inputs);
+      this.form.topic = "";
     },
     
     addInput : function() {
@@ -142,9 +143,10 @@ export default {
       else {
         this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
         console.log("HELLO", );
+        this.form.topic = "";
       }
 
-      this.form.topic = "";
+      
 
     },
     
