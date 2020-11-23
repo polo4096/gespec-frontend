@@ -16,7 +16,7 @@
           b-form(autocomplete="off")
             b-form-group(
               id="input-group-1"
-              label="Libellé :"
+              label="Topic : "
               label-for="input-1"
               description="Entrez le nom du champ que vous voulez renseigner.")
                b-form-input(
@@ -32,9 +32,26 @@
             draggable(class="dragArea list-group" :list="dragList" :group="{ name: 'formInput', pull: 'clone', put: false }" :sort="false" @end="onEnd")
               div(class="list-group-item" v-for="element in dragList" :key="element.name")
                 div {{ element.name }}
+
+        //InputRadio Dialog
+        b-modal(id="radioDialog" @ok="oklife") 
+           b-form-group(
+            id="inputRadiodialog"
+            label="Ici, rentrez une à une les valeurs de vos RadiosButtons : "
+            label-for="RadioDialog"
+            description="Entrez les une à une, en utilisant le bouton + ")
+              b-form-input(
+                id="inputRadio"
+                v-model="radioInput"
+                required
+                placeholder="Entrez une valeur"
+                autocomplete="off"
+                )
+              b-button(@click="addInput") +
+
                   
       //MainPage
-      b-col.mt-3( cols="6" style="background-color : #8D89A3; border-radius: 15px 50px; padding: 10px" )
+      b-col.mt-3( cols="6" style="background-color : #8D89A3; border-radius: 15px 15px; padding: 10px" )
         h2 Drop here
         br
         Form(:dropList="dropList" @remove-row="removeRow" )
@@ -81,10 +98,7 @@ export default {
           type: "radios",
           label: "Type",
           model: "type",
-          values: [
-              "Personal",
-              "Business"
-                  ]
+          values: 0
           }
       ],
       dropList: [
@@ -96,28 +110,48 @@ export default {
       myToggle: false,
       draglistShow : false,
       versionTabShow : false,
+      inputDialog : false,
       show: true,
       text : '',
+      radioInput : '',
+      radioInputs : [],
     }
   },
 
   methods: {
 
+    oklife : function() {
+      let inputs;
+      inputs = this.radioInputs;
+      this.radioInputs = [];
+      this.formancespek("radios", this.form.topic, inputs);
+    },
+    
+    addInput : function() {
+      this.radioInputs.push(this.radioInput);
+      this.radioInput = ""; 
+    },
+
     onEnd : function(evt){
+
       if (this.dragList[evt.oldIndex].type === "radios"){
-      this.formancespek(this.dragList[evt.oldIndex].type, this.form.topic, this.values);
-      console.log("Wassup?", );
+        this.$bvModal.show("radioDialog");
+        console.log("Wassup?", this.radioInputs);
       }
 
       else {
-      this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
-      console.log("HELLO", );
+        this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
+        console.log("HELLO", );
       }
+
+      this.form.topic = "";
+
     },
     
-    formancespek : function(type, label) {
+    formancespek : function(type, label, values) {
       var x ;
 
+      console.log("VALEURS ICI !!!", values);
       x= {
           schema : {
             fields : [
@@ -125,7 +159,7 @@ export default {
                 type: type,
                 label: label,
                 model: label,
-                values: ["values","John"],
+                values: values,
                 default: true
               }
             ]
