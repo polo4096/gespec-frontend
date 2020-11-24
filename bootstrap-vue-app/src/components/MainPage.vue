@@ -47,7 +47,7 @@
       b-sidebar( v-model="versionTabShow" id="sidebar-2" title="Versionning" right shadow)
         h4 Version en production
         div(class="py-2")
-          b-button(v-if="this.myChapters[0]" @click="changeChapter(myChapters[0])" variant="success") {{this.myChapters[0].title}} V: {{this.myChapters[0]._version}}.0
+          b-button(v-if="this.mostRecentChapter" @click="changeChapter(mostRecentChapter)" variant="success") {{this.mostRecentChapter.title}} V: {{this.mostRecentChapter._version}}.0
         h4 Versions antérieurs
         div(class="py-2")
           div(v-for="version in previousChapters")
@@ -89,26 +89,23 @@ export default {
       versionTabShow : false,
       show: true,
       text : '',
-      actualChapter: {},
-      activeCopy: false
+      //actualChapter: {},
+      activeCopy: false,
+      //mostRecentChapter : {}
     }
   },
   watch: {
     actualChapter: async function (val) {
-      console.log("VAL :", val)
       await this.$store.dispatch('loadPrevious', {chapterId: val._id})
+      await this.$store.dispatch('loadOneChapter', {chapterId: val._id})
       this.dropList = []
       this.actualChapter.topics.forEach(el => {
-        console.log("element : ", el.schema.fields)
-
         let x ;
         x = {
           schema : {
             fields : el.schema.fields
           },
-          model: {
-
-          }
+          model: el.model
         }
         this.dropList.push(x)
       })
@@ -116,14 +113,30 @@ export default {
 
   },
   computed: {
-    myChapters: {
-        get() {
-          return this.$store.state.chapters
-        },
-        set(value) {
-          this.$store.commit('SET_CHAPTERS', value)
-        }
+    actualChapter: {
+      get() {
+        return this.$store.state.activeChapter || this.myChapters[0]
       },
+      set(value) {
+        this.$store.commit('SET_ACTIVE_CHAPTER', value)
+      }
+    },
+    mostRecentChapter: {
+      get() {
+        return this.$store.state.mostRecentActiveChapter
+      },
+      set(value) {
+        this.$store.commit('SET_RECENT_ACTIVE_CHAPTER', value)
+      }
+    },
+    myChapters: {
+      get() {
+        return this.$store.state.chapters
+      },
+      set(value) {
+        this.$store.commit('SET_CHAPTERS', value)
+      }
+    },
     previousChapters: {
       get() {
         let array = this.$store.state.oldChapters
@@ -134,10 +147,8 @@ export default {
         this.$store.commit('SET_OLD_CHAPTERS', value)
       }
     },
+  },
 
-
-
-    },
 
   methods: {
     onStart : function () {
@@ -150,26 +161,24 @@ export default {
     },
     
     formance : function(type, label) {
-      var x ; 
+      var x ;
 
       x= {
           schema : {
             fields : [
-            {
-              type: type,
-              label: label,
-              model: label,
-              default: true
-          }
-        ]
-      },
+                  {
+                    type: type,
+                    label: label,
+                    model: label,
+                    default: true
+                  }
+                ]
+          },
           model: {
 
           }
       }
       this.dropList.push(x);
-      console.log(this.dropList)
-
     },
 
     removeRow(index) {
@@ -183,39 +192,42 @@ export default {
     },
     changeChapter(newChapter) {
       this.actualChapter = newChapter
-      console.log("Chapitre changé")
+      console.log("CHAPTER CHANGED")
     },
     async saveChapter() {
       this.actualChapter.topics = this.dropList
       await this.$store.dispatch('updateChapter', this.actualChapter)
       await this.$store.dispatch('loadPrevious', {chapterId: this.actualChapter._id})
+      await this.$store.dispatch('loadOneChapter', {chapterId: this.actualChapter._id})
+      console.log("CHAPTER SAVED")
     }
 
   },
   async created() {
-    await this.$store.dispatch('loadChapters')
-    this.actualChapter = this.myChapters[0]
-    console.log("LOADED !", this.actualChapter.topics)
-    console.log("Mounted")
-    this.actualChapter.topics.forEach(el => {
-      console.log("element : ", el.schema.fields)
+    //await this.$store.dispatch('loadChapters')
+    //this.actualChapter = this.myChapters[0]
+    if(this.actualChapter.topics === undefined){
+      this.actualChapter = this.myChapters[0]
+    }
 
+    this.actualChapter.topics.forEach(el => {
       let x ;
       x = {
         schema : {
           fields : el.schema.fields
         },
-        model: {
-
-        }
+        model:  el.model
       }
       this.dropList.push(x)
     })
+    console.log("Created")
   },
 
-  mounted () {
-
+  async mounted () {
+    await this.$store.dispatch('loadPrevious', {chapterId: this.actualChapter._id})
+    await this.$store.dispatch('loadOneChapter', {chapterId: this.actualChapter._id})
      //this.dropList = this.actualChapter.topics
+    console.log("Mounted")
   },
 
 }

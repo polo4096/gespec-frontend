@@ -2,11 +2,14 @@ import '@babel/polyfill'
 import 'mutationobserver-shim'
 import Vue from 'vue'
 import './plugins/bootstrap-vue'
-import App from './App.vue'
+//import App from './App.vue'
+//import Home from './pages/Home'
 import Vuex from 'vuex'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+
+import routes from './routes'
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
@@ -16,6 +19,8 @@ Vue.use(VueAxios, axios)
 
 const store = new Vuex.Store({
   state: {
+    activeChapter : {},
+    mostRecentActiveChapter : {},
     chapters: [],
     oldChapters: []
   },
@@ -23,18 +28,38 @@ const store = new Vuex.Store({
     SET_CHAPTERS (state, chapters) {
       state.chapters = chapters
     },
+    SET_ACTIVE_CHAPTER (state, chapter) {
+      state.activeChapter = chapter
+    },
+    SET_RECENT_ACTIVE_CHAPTER (state, chapter) {
+      state.mostRecentActiveChapter = chapter
+    },
     SET_OLD_CHAPTERS (state, chapters) {
         state.oldChapters = chapters
     }
   },
   actions: {
+      async loadOneChapter({commit}, payload) {
+          const params ={
+              chapterId: payload.chapterId
+          }
+          let url = "http://localhost:3000/chapter/" + params.chapterId
+
+          return axios
+              .get(url)
+              .then(r => r.data)
+              .then(chapter => {
+
+                  commit('SET_RECENT_ACTIVE_CHAPTER', chapter)
+              })
+      },
       async loadChapters ({ commit }) {
-          console.log("YO")
+
           return axios
           .get('http://localhost:3000/chapter')
           .then(r => r.data)
           .then(chapters => {
-            console.log(chapters)
+
             commit('SET_CHAPTERS', chapters)
           })
     },
@@ -43,30 +68,24 @@ const store = new Vuex.Store({
               chapterId: payload.chapterId
           }
           let url = "http://localhost:3000/old_chapter/" + params.chapterId
-          console.log("URL :", url)
-          console.log("chapterId :", params)
+
           return axios
               .get(url)
               .then(r => r.data)
               .then(chapters => {
-                  console.log(("AXIOS CHAPTERS :"), chapters)
                   commit('SET_OLD_CHAPTERS', chapters)
               })
       },
 
       async updateChapter({dispatch}, payload) {
           const params = payload
-          console.log("PARAMS : ", params)
           let url = "http://localhost:3000/chapter/" + params._id
-          console.log("URL :", url)
-          console.log("chapterId :", params)
           return axios
               .post(url,params)
               .then(r => r.data)
               .then(chapters => {
                   dispatch('loadChapters')
-                  console.log(("UPDATED:"), chapters)
-
+                  console.log(("UPDATED :"), chapters)
               })
       }
   }
@@ -76,8 +95,25 @@ Vue.use(BootstrapVueIcons)
 
 Vue.config.productionTip = false
 
-new Vue ({
-  el: '#app',
-  render(h) { return h(App) },
-  store: store,
+const app = new Vue ({
+    el: '#app',
+    data: {
+        currentRoute: window.location.pathname
+    },
+    computed: {
+        ViewComponent () {
+            const matchingView = routes[this.currentRoute]
+            return matchingView
+                ? require('./pages/' + matchingView + '.vue').default
+                : require('./pages/404.vue')
+        }
+    },
+    render(h) { return h(this.ViewComponent) },
+    store: store,
  });
+
+window.addEventListener('popstate', () => {
+    app.currentRoute = window.location.pathname
+})
+
+
