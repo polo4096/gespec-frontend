@@ -4,19 +4,27 @@
 
       b-card
         p(v-if="this.myChapters[0]") Bienvenue sur le POC de gestion des spécifications !
-
-
-        ul( v-for="chapter in myChapters" v-if="chapter.type === 'PAIE' ") Paie
-          li( v-for="chapter in myChapters" v-if="chapter.type === 'PAIE'" @click="$store.commit('SET_ACTIVE_CHAPTER', chapter)" style="cursor: pointer; color: blue ")
-            v-link(href="/form" ) {{ chapter.title }}
-            li.ml-4( v-for="chapterChild in myChapters" v-if="compareId(chapterChild.parentChapter, chapter._id)" @click="$store.commit('SET_ACTIVE_CHAPTER', chapterChild)" style="cursor: pointer; color: blue ")
-              v-link(href="/form" ) {{ chapterChild.title }}
-
-        ul( v-for="chapter in myChapters" v-if="chapter.type === 'GTA' ") GTA
-          li( v-for="chapter in myChapters" v-if="chapter.type === 'GTA'" @click="$store.commit('SET_ACTIVE_CHAPTER', chapter )" style="cursor: pointer; color: blue " href="/form")
-            v-link(href="/form" ) {{ chapter.title }}
-            li.ml-4( v-for="chapterChild in myChapters" v-if="compareId(chapterChild.parentChapter, chapter._id)" @click="$store.commit('SET_ACTIVE_CHAPTER', chapterChild)" style="cursor: pointer; color: blue ")
-              v-link(href="/form" ) {{ chapterChild.title }}
+        b-list-group
+          b-list-group-item
+            b-row(align-v="center")
+              b-col(cols="1")
+                h3 Paie
+              ul()
+                li( v-for="chapter in myChapters" :key="chapter._id" v-if="chapter.type === 'PAIE' && chapter.parentChapter === undefined"   style=" color: blue ")
+                  div(@click="$store.commit('SET_ACTIVE_CHAPTER', chapter)")
+                      v-link( href="/form" ) {{ chapter.title }}
+                  div.ml-4( v-for="chapterChild in myChapters" :key="chapterChild._id" v-if="chapter != undefined && compareId(chapterChild.parentChapter, chapter._id)" @click="$store.commit('SET_ACTIVE_CHAPTER', chapterChild)" style="cursor: pointer; color: blue ")
+                    v-link(href="/form" ) {{ chapterChild.title }}
+          b-list-group-item
+            b-row(align-v="center")
+              b-col(cols="1")
+                h3 Smart
+              ul()
+                li( v-for="chapter in myChapters" :key="chapter._id" v-if="chapter.type === 'SMART' && chapter.parentChapter === undefined"   style=" color: blue ")
+                  div(@click="$store.commit('SET_ACTIVE_CHAPTER', chapter)")
+                    v-link( href="/form" ) {{ chapter.title }}
+                  div.ml-4( v-for="chapterChild in myChapters" :key="chapterChild._id" v-if="chapter != undefined && compareId(chapterChild.parentChapter, chapter._id)" @click="$store.commit('SET_ACTIVE_CHAPTER', chapterChild)" style="cursor: pointer; color: blue ")
+                    v-link(href="/form" ) {{ chapterChild.title }}
 </template>
 
 <script>
@@ -52,6 +60,9 @@ export default {
         this.$store.commit('SET_CHAPTERS', value)
       }
     },
+    structuredChapters() {
+      let chapters = [[]];
+    }
   },
   methods: {
     compareId(id1,id2) {
