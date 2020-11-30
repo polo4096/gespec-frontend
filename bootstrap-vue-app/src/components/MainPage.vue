@@ -53,7 +53,7 @@
                   
       //MainPage
 
-      b-col.mt-3( cols="6" @mouseover="mouseOver()" @mouseleave="mouseLeave()" style="background-color : #f8f9fa; border-radius: 10px 00px; padding: 10px;" )
+      b-col.mt-3.mb-3( cols="6" @mouseover="mouseOver()" @mouseleave="mouseLeave()" style="background-color : #FFF; border-radius: 10px 10px; padding: 10px;" )
         h2 {{this.actualChapter.title}}
 
         br

@@ -1,6 +1,6 @@
 <template lang="pug">
-  b-container(id="app" fluid :style="myStyle")
-    main-layout
+  main-layout
+    b-container(id="app" fluid :style="myStyle")
       MainPage
 </template>
 
@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       myStyle:{
-        backgroundColor:"#CBCBCF"
+        backgroundColor:"#519AEE"
       }
     }
   },
@@ -40,6 +40,6 @@ html {
 }
 body {
   min-height: 100%;
-  background-color : #CBCBCF;
+  background-color : #519AEE;
 }
 </style>
