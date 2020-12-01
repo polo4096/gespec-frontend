@@ -22,8 +22,8 @@
             Chapitre actif : {{this.actualChapter.title ? this.actualChapter.title :  this.myChapters[0].title + " (par défaut)"}}
           </b-nav-text>
           <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-2" placeholder="Recherche par thème"></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit" href="/">Rechercher</b-button>
+            <b-form-input v-model="processText" size="sm" class="mr-sm-2" placeholder="Recherche par thème"></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit" :href="'/find?word=' + processText">Rechercher</b-button>
           </b-nav-form>
 
 
@@ -40,6 +40,11 @@ import VLink from '../components/VLink.vue'
 export default {
   components: {
     VLink
+  },
+  data() {
+    return {
+      processText : "",
+    }
   },
   computed: {
     actualChapter: {

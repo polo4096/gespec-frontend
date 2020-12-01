@@ -60,9 +60,6 @@ export default {
         this.$store.commit('SET_CHAPTERS', value)
       }
     },
-    structuredChapters() {
-      let chapters = [[]];
-    }
   },
   methods: {
     compareId(id1,id2) {

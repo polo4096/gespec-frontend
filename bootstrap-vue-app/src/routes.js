@@ -1,4 +1,5 @@
 export default {
     '/': 'Home',
-    '/form': 'Form'
+    '/form': 'Form',
+    '/find': 'Find'
 }
