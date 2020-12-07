@@ -69,12 +69,16 @@ export default {
     },
   },
   methods: {
-    onReset() {
-      axios
+    async onReset() {
+       await axios
           .get('http://localhost:3000/reset')
           .then(response => (this.info = response))
       location.reload();
     }
+  },
+
+  mounted() {
+
   }
 }
 </script>

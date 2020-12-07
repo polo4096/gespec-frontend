@@ -30,6 +30,7 @@
 <script>
 import MainLayout from '../layouts/Main.vue'
 import VLink from '../components/VLink.vue'
+import axios from 'axios'
 var _ = require('lodash');
 export default {
   components: {
@@ -68,7 +69,17 @@ export default {
   },
 
   async created() {
+    console.log(this.$store.state.chapters.length)
     await this.$store.dispatch('loadChapters')
+    console.log(this.$store.state.chapters.length)
+    if(this.$store.state.chapters.length === 0) {
+      await axios
+          .get('http://localhost:3000/reset')
+          .then(response => (this.info = response))
+      await this.$store.dispatch('loadChapters')
+      await this.$store.dispatch('loadPrevious', {chapterId: this.actualChapter._id})
+      await this.$store.dispatch('loadOneChapter', {chapterId: this.actualChapter._id})
+    }
   }
 }
 </script>

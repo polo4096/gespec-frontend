@@ -92,6 +92,7 @@ import Form from '../components/Form'
 import draggable from 'vuedraggable'
 import Vue from "vue";
 import tabl from "./tabl.vue";
+
 Vue.component("tabl", tabl);
 
 export default {
