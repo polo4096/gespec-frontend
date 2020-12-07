@@ -41,14 +41,21 @@
             label="Ici, rentrez une à une les valeurs de vos RadiosButtons : "
             label-for="RadioDialog"
             description="Entrez les une à une, en utilisant le bouton + ")
-              b-form-input(
-                id="inputRadio"
-                v-model="radioInput"
-                required
-                placeholder="Entrez une valeur"
-                autocomplete="off"
-                )
-              b-button(@click="addInput") +
+              b-row
+                b-col(cols="9")
+                  b-form-input(
+                    id="inputRadio"
+                    v-model="radioInput"
+                    required
+                    placeholder="Entrez une valeur"
+                    autocomplete="off"
+                    v-on:keyup.enter="addInput"
+                    )
+                b-button(@click="addInput") +
+              b-row
+                 b-col(cols="9")
+                    ul.my-4 Inputs du radio bouton :
+                      li.mt-2(v-for="input in radioInputs") {{input}}
 
                   
       //MainPage
@@ -209,9 +216,12 @@ export default {
 
     onEnd : function(evt){
 
-      if (this.dragList[evt.oldIndex].type === "radios"){
-        this.$bvModal.show("radioDialog");
-        console.log("Wassup?", this.radioInputs);
+      if (this.dragList[evt.oldIndex].type === "radios" ){
+        if(this.form.topic != "") {
+          this.$bvModal.show("radioDialog");
+          console.log("Wassup?", this.radioInputs);
+        }
+
       }
 
       else {

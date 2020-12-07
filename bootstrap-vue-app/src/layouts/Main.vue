@@ -18,12 +18,15 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
+          <b-nav-item>
+            <b-button size="sm" class="my-2 my-sm-0" variant="danger" @click="onReset">Reset</b-button>
+          </b-nav-item>
           <b-nav-text class="mr-3" v-if="this.myChapters[0]">
             Chapitre actif : {{this.actualChapter.title ? this.actualChapter.title :  this.myChapters[0].title + " (par défaut)"}}
           </b-nav-text>
           <b-nav-form>
-            <b-form-input v-model="processText" size="sm" class="mr-sm-2" placeholder="Recherche par thème"></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit" :href="'/find?word=' + processText">Rechercher</b-button>
+            <b-form-input v-model="processText" size="sm" class="mr-sm-2" placeholder="Recherche par thème" ></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" variant="dark" type="submit" :href="'/find?word=' + processText">Rechercher</b-button>
           </b-nav-form>
 
 
@@ -37,6 +40,7 @@
 
 <script>
 import VLink from '../components/VLink.vue'
+import axios from 'axios'
 export default {
   components: {
     VLink
@@ -63,6 +67,14 @@ export default {
         this.$store.commit('SET_CHAPTERS', value)
       }
     },
+  },
+  methods: {
+    onReset() {
+      axios
+          .get('http://localhost:3000/reset')
+          .then(response => (this.info = response))
+      location.reload();
+    }
   }
 }
 </script>

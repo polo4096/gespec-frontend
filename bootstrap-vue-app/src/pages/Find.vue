@@ -64,9 +64,9 @@ export default {
     },
     searchByProcess() {
       this.myChapters.forEach(chapter => {
-        console.log("yoyo", chapter.title.toLowerCase().includes(this.currentUrl.word.toLowerCase().trim()));
-        console.log(chapter.title.toLowerCase())
-        if(chapter.title.toLowerCase().includes(this.currentUrl.word.toLowerCase().trim())){
+        console.log("yoyo", chapter.tag.toLowerCase().includes(this.currentUrl.word.toLowerCase().trim()));
+        console.log(chapter.tag.toLowerCase())
+        if(chapter.tag.toLowerCase().includes(this.currentUrl.word.toLowerCase().trim())){
           this.matchingChapters.push(chapter);
           console.log(this.matchingChapters);
         }
