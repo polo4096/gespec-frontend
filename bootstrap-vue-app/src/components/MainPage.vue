@@ -17,7 +17,7 @@
           b-form(autocomplete="off")
             b-form-group(
               id="input-group-1"
-              label="Topic : "
+
               label-for="input-1"
               description="Entrez le nom du champ que vous voulez renseigner.")
                b-form-input(
@@ -226,9 +226,12 @@ export default {
       }
 
       else {
-        this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
-        console.log("HELLO", );
-        this.form.topic = "";
+        if(this.form.topic != "") {
+          this.formance(this.dragList[evt.oldIndex].type, this.form.topic);
+          console.log("HELLO", );
+          this.form.topic = "";
+        }
+
       }
       this.draglistShow = ! this.draglistShow
       

@@ -26,7 +26,7 @@
           </b-nav-text>
           <b-nav-form>
             <b-form-input v-model="processText" size="sm" class="mr-sm-2" placeholder="Recherche par thème" ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" variant="dark" type="submit" :href="'/find?word=' + processText">Rechercher</b-button>
+            <b-button size="sm" class="my-2 my-sm-0" variant="dark"  :href="'/find?word=' + processText">Rechercher</b-button>
           </b-nav-form>
 
 
